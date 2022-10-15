@@ -1,0 +1,60 @@
+﻿@using ProiectMaster.Models.Entites
+@model List<Product>
+@{
+    ViewData["Title"] = "Cart";
+}
+
+@inject IHttpContextAccessor HttpContextAccessor
+@{
+    var cantitati = HttpContextAccessor.HttpContext.Session.Get<Dictionary<int, int>>(SessionHelper.ShoppingCart);
+
+}
+
+<h1>Your Cart</h1>
+
+<br/>
+<div class="row">
+    <table class="table">
+        <thead>
+        <tr style="background-color: aliceblue;">
+            <th>Image</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Decription</th>
+            <th>Quantity</th>
+            <th>Total Price</th>
+            <th>Remove from cart</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                        <img src="~/@item.ImagePath" width="200px" />
+                </td>
+                <td>@item.Name</td>
+                <td>@item.Price <span>$</span></td>
+                <td>@item.Description</td>
+                <td>@cantitati[item.Id]</td>
+                    <td>@(item.Price * cantitati[item.Id]) <span>$</span></td>
+                <td>
+                        <a asp-action="RemoveFromCart" asp-route-id="@item.Id" class="btn btn-danger">
+                        <i class="fas fa-trash-alt"></i>
+                    </a>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
+<div class="row">
+    <div class="col-6">
+        <h3>Total Amount</h3>
+        <h3>Grant Total : @Model.Sum(c=>c.Price * cantitati[c.Id]) <span>$</span></h3>
+    </div>
+    <div class="col-6">
+        <a asp-area="Customer" asp-action="Checkout" asp-controller="Home" class="btn btn-info" style="float: right;">Proceed to Checkout</a>
+    </div>
+</div>
+

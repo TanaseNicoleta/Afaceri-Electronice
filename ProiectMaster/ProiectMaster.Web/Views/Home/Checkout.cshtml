@@ -1,0 +1,53 @@
+﻿@using ProiectMaster.Models.Entites
+@model List<Product>
+@{
+    ViewData["Title"] = "Cart";
+}
+
+@inject IHttpContextAccessor HttpContextAccessor
+@{
+    var cantitati = HttpContextAccessor.HttpContext.Session.Get<Dictionary<int, int>>(SessionHelper.ShoppingCart);
+
+}
+
+<h1>Your Order</h1>
+<form action="/save-order" method="post">
+    <div>
+        
+            @foreach (var item in Model)
+            {
+            <div class="row" style="margin: 20px 20px 20px 0;">
+                <div style="margin-right: 20px;">
+                    <img src="~/@item.ImagePath" width="200px" />
+                </div>
+                <div>
+                    <p>@item.Name</p>
+                    <p>@item.Price<span>$ x </span>@cantitati[item.Id]</p>
+                    <p>@(item.Price * cantitati[item.Id])<span>$</span></p>
+                </div>
+            </div>
+            }
+
+        <div class="col-6" style="background-color: aliceblue; padding: 50px 20px;">
+            <label>Name</label>
+            <input name="name" type="text" class="form-control"
+                   style="background-color: azure; border-color: #4a7789; border-width: 2px; border-radius: 1px; margin-bottom: 10px;" />
+            <label>Email Address</label>
+            <input name="email" type="email" class="form-control"
+                   style="background-color: azure; border-color: #4a7789; border-width: 2px; border-radius: 1px;" />
+        </div>
+    </div>
+
+<br/>
+<br/>
+<div class="row">
+    <div class="col-6">
+        <h3>Total Amount</h3>
+        <h3>Grant Total : @Model.Sum(c=>c.Price * cantitati[c.Id]) <span>$</span></h3>
+    </div>
+    <div class="col-6">
+        <button type="submit" value="Send Order" class="btn btn-info" style="float: right;">Send Order</button>
+    </div>
+</div>
+</form>
+

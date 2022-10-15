@@ -1,0 +1,51 @@
+﻿@model ProductVM
+
+@inject IHttpContextAccessor HttpContextAccessor
+@{
+    ViewData["Title"] = "Details";
+    
+    var route = "/Add/{0}";
+    route = string.Format(route, Model.Id);
+    var product = Model;
+}
+
+<h2 class="text-info">Product Details</h2>
+
+<form action="@route" method="post">
+
+    <div class="p-4 row">
+        <div class="col-8" style="background-color: aliceblue;">
+
+            <div class="form-group row" style="margin: 50px 20px;">
+                <div class="col-4">
+                    <p style="padding-bottom: 20px; font-weight: 500">Product name</p>
+                    <p style="padding-bottom: 20px; font-weight: 500">Price</p>
+                    <p style="padding-bottom: 20px; font-weight: 500">Description</p>
+                    <p style="padding-bottom: 20px; font-weight: 500">Quantity</p>
+                </div>
+                <div class="col-4" style="padding: 0;">
+                    <p style="padding-bottom: 20px;">@product.Name</p>
+                    <p style="padding-bottom: 20px;">@product.Price</p>
+                    <p style="padding-bottom: 20px;">@product.Description</p>
+                    <input id="qty" name="qty" class="form-control" 
+                    style="background-color: azure; border-color: #4a7789; border-width: 2px; border-radius: 1px;" />
+
+                </div>
+            </div>
+
+            <div class="form-group row" style="margin-left: 20px;">
+                <div class="col-8">
+                   <button type="submit" value="Add to bag" class="btn btn-primary form-control">Add to Bag</button>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-4">
+            <img src="~/@Model.ImagePath" alt="no image" width="100%" />
+        </div>
+    </div>
+
+    <br/>
+
+</form>
